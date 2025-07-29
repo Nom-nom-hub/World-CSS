@@ -2,6 +2,8 @@
 
 A revolutionary CSS/JavaScript system that creates real-time, environment-based theming for websites. World.CSS automatically adjusts colors based on your location, time of day, weather conditions, and solar position to create truly living, ambient themes.
 
+**Works with any web technology** - React, Vue, Angular, Node.js, Python, Ruby, .NET, or plain HTML!
+
 ## 🌟 Features
 
 ### **Real-Time Environmental Theming**
@@ -32,19 +34,14 @@ A revolutionary CSS/JavaScript system that creates real-time, environment-based 
 
 ### **Prerequisites**
 - Web server (Apache, Nginx, etc.)
-- PHP 7.4+ with cURL extension
+- **Backend API** (PHP, Node.js, Python, Ruby, .NET, etc.)
 - OpenWeatherMap API key (free)
 
 ### **Installation**
 
 1. **Clone or download** the World.CSS files to your web server
 2. **Get an OpenWeatherMap API key** from [openweathermap.org](https://openweathermap.org/api)
-3. **Configure the API key** in `backend/config.php`:
-   ```php
-   <?php
-   define('OPENWEATHER_API_KEY', 'your_api_key_here');
-   ?>
-   ```
+3. **Set up your backend API** (see examples below)
 4. **Include World.CSS** in your HTML:
    ```html
    <link rel="stylesheet" href="assets/world.css">
@@ -72,6 +69,84 @@ A revolutionary CSS/JavaScript system that creates real-time, environment-based 
 </html>
 ```
 
+## 🔧 Backend API Options
+
+World.CSS works with **any backend technology**. Here are examples:
+
+### **PHP Backend** (Included)
+```php
+// backend/world.php - Already included
+// Provides: locate, sun, weather endpoints
+```
+
+### **Node.js Backend**
+```javascript
+// server.js
+const express = require('express');
+const axios = require('axios');
+
+app.get('/api/locate', async (req, res) => {
+    // IP geolocation logic
+});
+
+app.get('/api/sun', async (req, res) => {
+    // Solar calculation logic
+});
+
+app.get('/api/weather', async (req, res) => {
+    // Weather API logic
+});
+```
+
+### **Python Backend**
+```python
+# app.py
+from flask import Flask, jsonify
+import requests
+
+app = Flask(__name__)
+
+@app.route('/api/locate')
+def locate():
+    # IP geolocation logic
+    pass
+
+@app.route('/api/sun')
+def sun():
+    # Solar calculation logic
+    pass
+
+@app.route('/api/weather')
+def weather():
+    # Weather API logic
+    pass
+```
+
+### **Ruby Backend**
+```ruby
+# app.rb
+require 'sinatra'
+require 'net/http'
+
+get '/api/locate' do
+  # IP geolocation logic
+end
+
+get '/api/sun' do
+  # Solar calculation logic
+end
+
+get '/api/weather' do
+  # Weather API logic
+end
+```
+
+### **Custom API Endpoints**
+You can also use any existing API or create your own endpoints. World.CSS just needs:
+- **Geolocation** (latitude/longitude)
+- **Solar data** (elevation/azimuth)
+- **Weather data** (temperature, conditions)
+
 ## 📁 Project Structure
 
 ```
@@ -81,7 +156,7 @@ World-CSS/
 │   ├── world.js           # Core JavaScript engine
 │   └── world-config.js    # User configuration file
 ├── backend/
-│   ├── world.php          # PHP API endpoints
+│   ├── world.php          # PHP API endpoints (example)
 │   ├── config.php         # API configuration
 │   ├── cache/             # Cached API responses
 │   └── clean-cache.php    # Cache cleanup script
@@ -100,130 +175,80 @@ Edit `assets/world-config.js` to customize:
 
 ```javascript
 window.WorldCSSConfig = {
-  // Phase-specific colors
-  phases: {
-    night: {
-      background: { hue: 240, saturation: 85, lightness: 15 },
-      accent: { hue: 200, saturation: 85, lightness: 65 },
-      text: { primary: "#ffffff", secondary: "#e0e0e0" }
+    // API endpoints (change to match your backend)
+    api: {
+        locate: '/backend/world.php?action=locate',
+        sun: '/backend/world.php?action=sun',
+        weather: '/backend/world.php?action=weather'
     },
-    // ... other phases
-  },
-  
-  // Manual themes
-  themes: {
-    light: { /* light mode colors */ },
-    dark: { /* dark mode colors */ }
-  },
-  
-  // Behavior settings
-  behavior: {
-    updateInterval: 5,        // Update frequency (minutes)
-    transitionDuration: 1.2,  // Transition duration (seconds)
-    features: {
-      weatherEffects: true,
-      locationDetection: true,
-      automaticUpdates: true,
-      smoothTransitions: true
+    
+    // Color phases
+    phases: {
+        night: {
+            background: { hue: 240, saturation: 70, lightness: 15 },
+            accent: { hue: 200, saturation: 80, lightness: 60 },
+            text: '#ffffff'
+        },
+        // ... other phases
     }
-  }
 };
 ```
 
-### **API Configuration**
+### **Framework Integration Examples**
 
-#### **Option 1: Environment File (Recommended)**
+#### **React**
+```jsx
+import React, { useEffect } from 'react';
+import './assets/world.css';
 
-Create a `.env` file in your project root:
+function App() {
+    useEffect(() => {
+        // World.CSS automatically initializes
+    }, []);
 
-```bash
-# Copy the example file
-cp env.example .env
-
-# Edit the .env file
-nano .env
-```
-
-Add your API key to `.env`:
-
-```env
-# OpenWeatherMap API Key (required)
-OPENWEATHER_API_KEY=your_openweathermap_api_key_here
-
-# Cache duration in seconds (optional)
-CACHE_DURATION=3600
-```
-
-#### **Option 2: Direct Configuration**
-
-Configure your OpenWeatherMap API in `backend/config.php`:
-
-```php
-<?php
-define('OPENWEATHER_API_KEY', 'your_api_key_here');
-define('CACHE_DURATION', 3600); // Cache for 1 hour
-?>
-```
-
-#### **Environment Variable Priority**
-
-The system checks for API keys in this order:
-1. **Environment variables** (`$_ENV['OPENWEATHER_API_KEY']`)
-2. **`.env` file** (project root)
-3. **`config.php` constants** (backward compatibility)
-
-## 🎨 CSS Custom Properties
-
-World.CSS provides these CSS custom properties:
-
-```css
-:root {
-  --background-hue: 210;           /* Background color hue */
-  --background-saturation: 60;     /* Background saturation */
-  --background-lightness: 92;      /* Background lightness */
-  --accent-color: hsl(200,85%,65%); /* Accent color */
-  --text-color: #222222;          /* Primary text color */
-  --text-secondary: #666666;      /* Secondary text color */
+    return (
+        <div className="app">
+            <h1>My Ambient React App</h1>
+        </div>
+    );
 }
 ```
 
-### **Phase-Specific Classes**
+#### **Vue.js**
+```vue
+<template>
+    <div class="app">
+        <h1>My Ambient Vue App</h1>
+    </div>
+</template>
 
-The system adds classes to the document root:
-
-- `.worldcss-night` - Night phase styling
-- `.worldcss-twilight` - Twilight phase styling
-- `.worldcss-sunrise` - Sunrise phase styling
-- `.worldcss-day` - Day phase styling
-- `.worldcss-noon` - Noon phase styling
-- `.worldcss-sunset` - Sunset phase styling
-- `.worldcss-evening` - Evening phase styling
-
-## 🔧 API Endpoints
-
-### **Backend Services**
-
-The PHP backend provides these endpoints:
-
-- **`/backend/world.php?action=locate`** - IP-based geolocation
-- **`/backend/world.php?action=sun`** - Solar elevation/azimuth calculation
-- **`/backend/world.php?action=weather`** - Weather data from OpenWeatherMap
-
-### **Response Format**
-
-```json
-{
-  "success": true,
-  "data": {
-    "elevation": 15.2,
-    "azimuth": 180.5,
-    "phase": "day",
-    "weather": {
-      "temp": 22,
-      "clouds": 30,
-      "description": "partly cloudy"
+<script>
+export default {
+    mounted() {
+        // World.CSS automatically initializes
     }
-  }
+}
+</script>
+
+<style>
+@import './assets/world.css';
+</style>
+```
+
+#### **Angular**
+```typescript
+// app.component.ts
+import { Component, OnInit } from '@angular/core';
+
+@Component({
+    selector: 'app-root',
+    template: '<div class="app"><h1>My Ambient Angular App</h1></div>',
+    styleUrls: ['./assets/world.css']
+})
+export class AppComponent implements OnInit {
+    ngOnInit() {
+        // World.CSS automatically initializes
+    }
 }
 ```
 
@@ -275,13 +300,13 @@ The PHP backend provides these endpoints:
 
 2. **Location not detected**
    - Check server's IP geolocation
-   - Verify `backend/world.php` is accessible
-   - Check PHP cURL extension is enabled
+   - Verify your backend API is accessible
+   - Check your backend's geolocation service
 
 3. **Weather not loading**
    - Verify OpenWeatherMap API key
    - Check API rate limits
-   - Ensure cache directory is writable
+   - Ensure your backend can make external requests
 
 ### **Debug Mode**
 
@@ -300,52 +325,13 @@ This project is open source and available under the MIT License.
 1. Fork the repository
 2. Create a feature branch
 3. Make your changes
-4. Test thoroughly
-5. Submit a pull request
+4. Submit a pull request
 
 ## 📞 Support
 
-For questions, issues, or feature requests:
-- Check the demo pages for examples
-- Review the configuration options
-- Open an issue on GitHub
-
-## 🎨 Customization Examples
-
-### **Custom Phase Colors**
-
-```javascript
-// In world-config.js
-phases: {
-  night: {
-    background: { hue: 260, saturation: 90, lightness: 10 },
-    accent: { hue: 180, saturation: 85, lightness: 70 },
-    text: { primary: "#ffffff", secondary: "#e8e8e8" }
-  }
-}
-```
-
-### **Custom Weather Effects**
-
-```javascript
-weather: {
-  rainy: {
-    lightnessAdjustment: -25,
-    saturationAdjustment: -30,
-    overlay: "rgba(100,100,120,0.4)"
-  }
-}
-```
-
-### **Custom CSS Variables**
-
-```css
-:root {
-  --my-custom-color: hsl(var(--background-hue), 85%, 65%);
-  --my-border-radius: 12px;
-  --my-shadow: 0 4px 12px rgba(0,0,0,0.1);
-}
-```
+- **Issues**: [GitHub Issues](https://github.com/Nom-nom-hub/World-CSS/issues)
+- **Documentation**: [Wiki](https://github.com/Nom-nom-hub/World-CSS/wiki)
+- **Demo**: [Live Demo](demo/index.php)
 
 ---
 
