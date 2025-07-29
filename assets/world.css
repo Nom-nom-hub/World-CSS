@@ -1,0 +1,205 @@
+:root {
+  --background-hue: 210;
+  --background-lightness: 92;
+  --background-saturation: 60;
+  --text-color: hsl(0,0%,18%);
+  --text-secondary: hsl(0,0%,40%);
+  --accent-color: hsl(180,80%,60%);
+  background: hsl(var(--background-hue), var(--background-saturation), var(--background-lightness)%);
+  color: var(--text-color);
+  transition: background 1.2s ease-in-out, color 1.2s ease-in-out, --background-hue 1.2s ease-in-out, --background-lightness 1.2s ease-in-out, --background-saturation 1.2s ease-in-out;
+}
+
+/* Enhanced text readability */
+body {
+  text-shadow: 0 0 1px rgba(0,0,0,0.1);
+}
+
+/* Ensure text is always readable */
+h1, h2, h3, h4, h5, h6 {
+  text-shadow: 0 1px 2px rgba(0,0,0,0.1);
+}
+
+/* Dark mode text enhancements */
+.worldcss-dark body {
+  text-shadow: 0 0 1px rgba(255,255,255,0.1);
+}
+
+.worldcss-dark h1, 
+.worldcss-dark h2, 
+.worldcss-dark h3, 
+.worldcss-dark h4, 
+.worldcss-dark h5, 
+.worldcss-dark h6 {
+  text-shadow: 0 1px 2px rgba(255,255,255,0.1);
+}
+
+/* Fallback text color safety */
+* {
+  color: var(--text-color) !important;
+}
+
+/* Enhanced text contrast for all phases */
+.worldcss-twilight {
+  --text-color: #ffffff !important;
+  --text-secondary: #f0f0f0 !important;
+}
+
+.worldcss-twilight * {
+  color: #ffffff !important;
+}
+
+.worldcss-night {
+  --text-color: #ffffff !important;
+  --text-secondary: #e8e8e8 !important;
+}
+
+.worldcss-night * {
+  color: #ffffff !important;
+}
+
+.worldcss-sunrise {
+  --text-color: #000000 !important;
+  --text-secondary: #222222 !important;
+}
+
+.worldcss-sunrise * {
+  color: #000000 !important;
+}
+
+.worldcss-day {
+  --text-color: #000000 !important;
+  --text-secondary: #333333 !important;
+}
+
+.worldcss-day * {
+  color: #000000 !important;
+}
+
+.worldcss-noon {
+  --text-color: #000000 !important;
+  --text-secondary: #333333 !important;
+}
+
+        .worldcss-noon * {
+            color: #000000 !important;
+        }
+
+        /* Sunset phase */
+        .worldcss-sunset {
+            --text-color: #000000 !important;
+            --text-secondary: #222222 !important;
+        }
+        .worldcss-sunset * {
+            color: #000000 !important;
+        }
+
+        /* Evening phase */
+        .worldcss-evening {
+            --text-color: #ffffff !important;
+            --text-secondary: #f0f0f0 !important;
+        }
+        .worldcss-evening * {
+            color: #ffffff !important;
+        }
+
+/* Ensure minimum contrast for accessibility */
+@media (prefers-contrast: high) {
+  :root {
+    --text-color: #000000 !important;
+    --text-secondary: #333333 !important;
+  }
+  
+  .worldcss-dark {
+    --text-color: #ffffff !important;
+    --text-secondary: #e0e0e0 !important;
+  }
+}
+
+.worldcss-loading, .worldcss-loading body {
+  background: #f6f8fa !important;
+  color: #222 !important;
+  transition: none !important;
+}
+
+body {
+  background: inherit;
+  color: inherit;
+  transition: background 0.8s, color 0.8s;
+}
+
+/* Enhanced dark mode */
+.worldcss-dark {
+  --background-hue: 240;
+  --background-lightness: 8;
+  --background-saturation: 85;
+  --text-color: hsl(0,0%,95%);
+  --text-secondary: hsl(0,0%,80%);
+  --accent-color: hsl(200,85%,65%);
+  background: hsl(240, 85%, 8%) !important;
+}
+
+body.worldcss-dark, .worldcss-dark body {
+  background: hsl(240, 85%, 8%) !important;
+  color: hsl(0,0%,95%) !important;
+  text-shadow: 0 1px 2px rgba(0,0,0,0.3);
+}
+
+/* Enhanced text contrast for dark mode */
+.worldcss-dark h1, 
+.worldcss-dark h2, 
+.worldcss-dark h3, 
+.worldcss-dark h4, 
+.worldcss-dark h5, 
+.worldcss-dark h6 {
+  color: #ffffff !important;
+  text-shadow: 0 1px 3px rgba(0,0,0,0.5);
+}
+
+.worldcss-dark p,
+.worldcss-dark span,
+.worldcss-dark div {
+  color: #f0f0f0 !important;
+  text-shadow: 0 1px 2px rgba(0,0,0,0.3);
+}
+
+.worldcss-dark .container, .worldcss-dark .debug-panel {
+  background: rgba(24,28,38,0.96) !important;
+  color: hsl(0,0%,92%) !important;
+  border-color: #222 !important;
+}
+
+.container, .debug-panel {
+  background: rgba(255,255,255,0.85) !important;
+  color: hsl(0,0%,18%) !important;
+  border-color: #e0e6f0 !important;
+}
+
+.worldcss-light {
+  --background-hue: 55;
+  --background-lightness: 85;
+  --background-saturation: 90;
+  --text-color: hsl(0,0%,15%);
+  --text-secondary: hsl(0,0%,35%);
+  --accent-color: hsl(50,85%,65%);
+}
+
+/* Enhanced text contrast for light mode */
+.worldcss-light h1, 
+.worldcss-light h2, 
+.worldcss-light h3, 
+.worldcss-light h4, 
+.worldcss-light h5, 
+.worldcss-light h6 {
+  color: #000000 !important;
+  text-shadow: 0 1px 2px rgba(255,255,255,0.3);
+}
+
+.worldcss-light p,
+.worldcss-light span,
+.worldcss-light div {
+  color: #222222 !important;
+  text-shadow: 0 1px 1px rgba(255,255,255,0.2);
+}
+
+

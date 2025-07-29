@@ -1,0 +1,839 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>World.CSS - Living Ambient Themes</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <link rel="stylesheet" href="assets/world.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <script src="assets/world-config.js"></script>
+  <script src="assets/world.js"></script>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html, body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      overflow-x: hidden;
+    }
+
+    /* Premium Background with Particles */
+    .example-container {
+      min-height: 100vh;
+      position: relative;
+      background: linear-gradient(135deg, 
+        hsl(var(--background-hue), var(--background-saturation), var(--background-lightness)),
+        hsl(calc(var(--background-hue) + 20), calc(var(--background-saturation) - 10), calc(var(--background-lightness) + 5)));
+      transition: all 1.5s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .particles {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    .particle {
+      position: absolute;
+      background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+      border-radius: 50%;
+      animation: float 20s infinite linear;
+    }
+
+    @keyframes float {
+      0% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
+      10% { opacity: 1; }
+      90% { opacity: 1; }
+      100% { transform: translateY(-100px) rotate(360deg); opacity: 0; }
+    }
+
+    /* Premium Header */
+    .header {
+      position: relative;
+      z-index: 10;
+      padding: 3rem 0;
+      text-align: center;
+      background: transparent;
+      backdrop-filter: none;
+      border-bottom: none;
+    }
+
+    .logo-container {
+      position: relative;
+      display: inline-block;
+      margin-bottom: 1rem;
+      background: none;
+      border: none;
+      box-shadow: none;
+      padding: 0;
+    }
+    
+    .logo {
+      font-size: 4rem;
+      font-weight: 900;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      color: var(--text-color);
+      margin-bottom: 0.5rem;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      font-variant: small-caps;
+      position: relative;
+      z-index: 10;
+      text-shadow: 
+        0 2px 4px rgba(0,0,0,0.3),
+        0 4px 8px rgba(0,0,0,0.2);
+    }
+
+    .tagline {
+      font-size: 1.2rem;
+      font-weight: 400;
+      color: var(--text-secondary);
+      opacity: 0.9;
+      margin-bottom: 1rem;
+    }
+
+    /* Premium Content Section */
+    .content-section {
+      position: relative;
+      z-index: 10;
+      padding: 2rem;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .content-container {
+      background: rgba(255,255,255,0.08);
+      backdrop-filter: blur(30px);
+      border-radius: 32px;
+      padding: 3rem;
+      border: 1px solid rgba(255,255,255,0.1);
+      box-shadow: 
+        0 32px 64px rgba(0,0,0,0.1),
+        inset 0 1px 0 rgba(255,255,255,0.2);
+      transition: all 1.5s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .content-title {
+      font-size: 2.5rem;
+      font-weight: 700;
+      color: var(--text-color);
+      text-align: center;
+      margin-bottom: 2rem;
+      letter-spacing: -0.02em;
+    }
+
+    .content-description {
+      font-size: 1.1rem;
+      color: var(--text-secondary);
+      text-align: center;
+      margin-bottom: 3rem;
+      line-height: 1.6;
+    }
+
+    /* Ultra-Premium Timeline Bar */
+    .timeline-bar {
+      position: relative;
+      height: 120px;
+      background: 
+        linear-gradient(135deg, 
+          rgba(255,255,255,0.12), 
+          rgba(255,255,255,0.06)),
+        radial-gradient(circle at 50% 50%, 
+          rgba(255,255,255,0.1) 0%, 
+          transparent 70%);
+      border-radius: 60px;
+      margin: 2rem 0;
+      cursor: pointer;
+      border: 3px solid rgba(255,255,255,0.2);
+      overflow: hidden;
+      box-shadow: 
+        0 32px 64px rgba(0,0,0,0.12),
+        inset 0 1px 0 rgba(255,255,255,0.3),
+        0 0 0 1px rgba(255,255,255,0.08),
+        0 0 40px rgba(255,255,255,0.05);
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      backdrop-filter: blur(20px);
+    }
+
+    .timeline-bar::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: 
+        linear-gradient(90deg, 
+          transparent 0%, 
+          rgba(255,255,255,0.1) 50%, 
+          transparent 100%);
+      animation: timelineGlow 8s ease-in-out infinite;
+    }
+
+    @keyframes timelineGlow {
+      0%, 100% { opacity: 0.3; }
+      50% { opacity: 0.8; }
+    }
+
+    .timeline-track {
+      position: absolute;
+      left: 20px; right: 20px; top: 50%;
+      height: 8px;
+      border-radius: 4px;
+      background: linear-gradient(90deg,
+        #1e2850 0%, #503c9e 15%, #ff8c3c 25%, #ffe7a0 35%, #e6f7ff 50%, #ffe7a0 65%, #ff8c3c 75%, #503c9e 85%, #1e2850 100%
+      );
+      transform: translateY(-50%);
+      box-shadow: inset 0 2px 4px rgba(0,0,0,0.2);
+    }
+
+    .timeline-sun {
+      position: absolute;
+      top: 50%;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 60% 40%, #fffbe6 0%, #ffe7a0 60%, #ff8c3c 100%);
+      border: 3px solid rgba(255,255,255,0.9);
+      box-shadow: 
+        0 0 20px rgba(255,215,0,0.8),
+        0 4px 12px rgba(0,0,0,0.2),
+        inset 0 2px 4px rgba(255,255,255,0.8);
+      transform: translate(-50%, -50%);
+      transition: left 1s cubic-bezier(.4,1.4,.6,1), background 1s;
+      z-index: 10;
+    }
+
+    .timeline-label {
+      position: absolute;
+      left: 50%;
+      top: 100%;
+      transform: translate(-50%, 0);
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--text-color);
+      background: rgba(255,255,255,0.95);
+      border-radius: 12px;
+      padding: 0.5rem 1rem;
+      margin-top: 1rem;
+      box-shadow: 
+        0 8px 24px rgba(0,0,0,0.15),
+        0 2px 8px rgba(0,0,0,0.1);
+      pointer-events: none;
+      transition: left 1s cubic-bezier(.4,1.4,.6,1), background 1s;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255,255,255,0.2);
+    }
+
+    /* Phase Indicators */
+    .timeline-phases {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin: 2rem 0;
+      padding: 0 1rem;
+    }
+
+    .phase-indicator {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .phase-indicator:hover {
+      transform: translateY(-2px);
+    }
+
+    .phase-dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      margin-bottom: 0.5rem;
+      transition: all 0.3s ease;
+      border: 2px solid rgba(255,255,255,0.3);
+    }
+
+    .phase-dot.active {
+      transform: scale(1.5);
+      border-color: rgba(255,255,255,0.9);
+      box-shadow: 0 0 20px rgba(255,255,255,0.6);
+    }
+
+    .phase-dot.night { background: #1e2850; }
+    .phase-dot.twilight { background: #503c9e; }
+    .phase-dot.sunrise { background: #ff8c3c; }
+    .phase-dot.day { background: #ffe7a0; }
+    .phase-dot.noon { background: #e6f7ff; }
+    .phase-dot.sunset { background: #ff8c3c; }
+    .phase-dot.evening { background: #503c9e; }
+
+    .phase-label {
+      font-size: 0.8rem;
+      font-weight: 500;
+      color: var(--text-secondary);
+      text-align: center;
+      transition: all 0.3s ease;
+    }
+
+    .phase-indicator:hover .phase-label {
+      color: var(--text-color);
+    }
+
+    /* Color Palette */
+    .color-palette {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1.5rem;
+      margin: 2rem 0;
+    }
+
+    .color-swatch {
+      background: rgba(255,255,255,0.1);
+      backdrop-filter: blur(20px);
+      border-radius: 16px;
+      padding: 1.5rem;
+      border: 1px solid rgba(255,255,255,0.1);
+      box-shadow: 
+        0 8px 32px rgba(0,0,0,0.1),
+        inset 0 1px 0 rgba(255,255,255,0.2);
+      transition: all 0.3s ease;
+    }
+
+    .color-swatch:hover {
+      transform: translateY(-2px);
+      box-shadow: 
+        0 12px 40px rgba(0,0,0,0.15),
+        inset 0 1px 0 rgba(255,255,255,0.3);
+    }
+
+    .swatch-bg, .swatch-accent, .swatch-text {
+      width: 100%;
+      height: 60px;
+      border-radius: 8px;
+      margin-bottom: 0.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 600;
+      color: var(--text-color);
+      text-shadow: 0 1px 2px rgba(0,0,0,0.3);
+    }
+
+    .swatch-bg {
+      background: hsl(var(--background-hue), var(--background-saturation), var(--background-lightness));
+    }
+
+    .swatch-accent {
+      background: var(--accent-color);
+    }
+
+    .swatch-text {
+      background: var(--text-color);
+      color: hsl(var(--background-hue), var(--background-saturation), var(--background-lightness));
+    }
+
+    .color-swatch h4 {
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--text-color);
+      margin-bottom: 0.25rem;
+    }
+
+    .color-swatch p {
+      font-size: 0.8rem;
+      color: var(--text-secondary);
+      font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+    }
+
+    /* Info Grid */
+    .info-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1.5rem;
+      margin: 2rem 0;
+    }
+
+    .info-card {
+      background: rgba(255,255,255,0.1);
+      backdrop-filter: blur(20px);
+      border-radius: 16px;
+      padding: 1.5rem;
+      border: 1px solid rgba(255,255,255,0.1);
+      box-shadow: 
+        0 8px 32px rgba(0,0,0,0.1),
+        inset 0 1px 0 rgba(255,255,255,0.2);
+      transition: all 0.3s ease;
+    }
+
+    .info-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 
+        0 12px 40px rgba(0,0,0,0.15),
+        inset 0 1px 0 rgba(255,255,255,0.3);
+    }
+
+    .info-card h3 {
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: var(--text-color);
+      margin-bottom: 0.5rem;
+    }
+
+    .info-card p {
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+      line-height: 1.5;
+      white-space: pre-line;
+    }
+
+    /* Controls */
+    .controls {
+      text-align: center;
+      margin: 2rem 0;
+    }
+
+    .btn {
+      background: rgba(255,255,255,0.1);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255,255,255,0.2);
+      border-radius: 12px;
+      padding: 0.75rem 1.5rem;
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--text-color);
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 
+        0 4px 16px rgba(0,0,0,0.1),
+        inset 0 1px 0 rgba(255,255,255,0.2);
+    }
+
+    .btn:hover {
+      background: rgba(255,255,255,0.15);
+      transform: translateY(-1px);
+      box-shadow: 
+        0 8px 24px rgba(0,0,0,0.15),
+        inset 0 1px 0 rgba(255,255,255,0.3);
+    }
+
+    /* Phase-specific visibility */
+    .worldcss-night .timeline-label,
+    .worldcss-twilight .timeline-label,
+    .worldcss-evening .timeline-label {
+      background: rgba(0,0,0,0.95);
+      color: #ffffff;
+      border: 1px solid rgba(255,255,255,0.2);
+    }
+
+    .worldcss-night .phase-label,
+    .worldcss-twilight .phase-label,
+    .worldcss-evening .phase-label {
+      background: rgba(0,0,0,0.95);
+      color: #ffffff;
+      padding: 0.2rem 0.5rem;
+      border-radius: 6px;
+      border: 1px solid rgba(255,255,255,0.2);
+      font-weight: 600;
+      text-shadow: 0 1px 2px rgba(0,0,0,0.8);
+    }
+
+    /* Enhanced evening phase visibility */
+    .worldcss-evening .content-title,
+    .worldcss-evening .content-description,
+    .worldcss-evening .color-swatch h4,
+    .worldcss-evening .color-swatch p,
+    .worldcss-evening .info-card h3,
+    .worldcss-evening .info-card p,
+    .worldcss-evening .tagline,
+    .worldcss-evening .phase-label {
+      color: #ffffff !important;
+      text-shadow: 
+        0 1px 2px rgba(0,0,0,0.8),
+        0 2px 4px rgba(0,0,0,0.6),
+        0 0 10px rgba(255,255,255,0.3);
+    }
+
+    .worldcss-evening .btn {
+      background: rgba(255,255,255,0.2) !important;
+      color: #ffffff !important;
+      border: 2px solid rgba(255,255,255,0.4) !important;
+      text-shadow: 0 1px 2px rgba(0,0,0,0.8) !important;
+    }
+
+    /* Force all text to be white in evening phase */
+    .worldcss-evening * {
+      color: #ffffff !important;
+    }
+
+    /* Override specific elements that need different styling */
+    .worldcss-evening .swatch-bg,
+    .worldcss-evening .swatch-accent,
+    .worldcss-evening .swatch-text {
+      color: #000000 !important;
+      text-shadow: none !important;
+    }
+
+    .worldcss-evening .phase-dot {
+      border-color: rgba(255,255,255,0.8) !important;
+    }
+
+    /* Enhanced twilight phase visibility */
+    .worldcss-twilight .content-title,
+    .worldcss-twilight .content-description,
+    .worldcss-twilight .color-swatch h4,
+    .worldcss-twilight .color-swatch p,
+    .worldcss-twilight .info-card h3,
+    .worldcss-twilight .info-card p,
+    .worldcss-twilight .tagline,
+    .worldcss-twilight .phase-label {
+      color: #ffffff !important;
+      text-shadow: 
+        0 1px 2px rgba(0,0,0,0.8),
+        0 2px 4px rgba(0,0,0,0.6),
+        0 0 10px rgba(255,255,255,0.3);
+    }
+
+    .worldcss-twilight .btn {
+      background: rgba(255,255,255,0.2) !important;
+      color: #ffffff !important;
+      border: 2px solid rgba(255,255,255,0.4) !important;
+      text-shadow: 0 1px 2px rgba(0,0,0,0.8) !important;
+    }
+
+    /* Force all text to be white in twilight phase */
+    .worldcss-twilight * {
+      color: #ffffff !important;
+    }
+
+    /* Override specific elements that need different styling */
+    .worldcss-twilight .swatch-bg,
+    .worldcss-twilight .swatch-accent,
+    .worldcss-twilight .swatch-text {
+      color: #000000 !important;
+      text-shadow: none !important;
+    }
+
+    .worldcss-twilight .phase-dot {
+      border-color: rgba(255,255,255,0.8) !important;
+    }
+
+    /* Ensure logo has no box effects */
+    .logo, .logo-container, .header {
+      background: none !important;
+      border: none !important;
+      box-shadow: none !important;
+      outline: none !important;
+    }
+
+    /* Phase-specific logo text enhancements */
+    .worldcss-night .logo {
+      color: #ffffff;
+      text-shadow: 
+        0 2px 4px rgba(0,0,0,0.5),
+        0 4px 8px rgba(0,0,0,0.3),
+        0 0 20px rgba(255,255,255,0.3);
+    }
+    
+    .worldcss-twilight .logo {
+      color: #ffffff;
+      text-shadow: 
+        0 2px 4px rgba(0,0,0,0.4),
+        0 4px 8px rgba(0,0,0,0.2),
+        0 0 15px rgba(255,255,255,0.4);
+    }
+    
+    .worldcss-sunrise .logo {
+      color: #ffffff;
+      text-shadow: 
+        0 2px 4px rgba(0,0,0,0.3),
+        0 4px 8px rgba(0,0,0,0.2),
+        0 0 25px rgba(255,215,0,0.5);
+    }
+    
+    .worldcss-day .logo {
+      color: #000000;
+      text-shadow: 
+        0 2px 4px rgba(255,255,255,0.8),
+        0 4px 8px rgba(255,255,255,0.6),
+        0 0 20px rgba(255,255,255,0.4);
+    }
+    
+    .worldcss-noon .logo {
+      color: #000000;
+      text-shadow: 
+        0 2px 4px rgba(255,255,255,0.9),
+        0 4px 8px rgba(255,255,255,0.7),
+        0 0 25px rgba(150,200,255,0.6);
+    }
+    
+    .worldcss-sunset .logo {
+      color: #ffffff;
+      text-shadow: 
+        0 2px 4px rgba(0,0,0,0.4),
+        0 4px 8px rgba(0,0,0,0.3),
+        0 0 20px rgba(255,140,60,0.5);
+    }
+    
+    .worldcss-evening .logo {
+      color: #ffffff;
+      text-shadow: 
+        0 2px 4px rgba(0,0,0,0.7),
+        0 4px 8px rgba(0,0,0,0.5),
+        0 0 20px rgba(255,255,255,0.6),
+        0 0 30px rgba(200,150,255,0.8);
+    }
+  </style>
+</head>
+<body>
+  <div class="example-container">
+    <div class="particles" id="particles"></div>
+    
+    <div class="header">
+      <div class="logo-container">
+        <div class="logo">World.CSS</div>
+      </div>
+      <div class="tagline">Living Ambient Themes</div>
+    </div>
+
+    <div class="content-section">
+      <div class="content-container">
+        <h1 class="content-title">Real-Time Color Progression</h1>
+        <p class="content-description">
+          This page demonstrates World.CSS real-time, environment-based theming. 
+          The colors change based on your location, time of day, and weather conditions.
+        </p>
+        
+        <div class="timeline-bar" id="timelineBar">
+          <div class="timeline-track"></div>
+          <div class="timeline-sun" id="timelineSun"></div>
+          <div class="timeline-label" id="timelineLabel">Loading...</div>
+        </div>
+
+        <div class="timeline-phases" id="timelinePhases">
+          <div class="phase-indicator" data-phase="night" data-elevation="-12">
+            <div class="phase-dot night"></div>
+            <div class="phase-label">Night</div>
+          </div>
+          <div class="phase-indicator" data-phase="twilight" data-elevation="-3">
+            <div class="phase-dot twilight"></div>
+            <div class="phase-label">Twilight</div>
+          </div>
+          <div class="phase-indicator" data-phase="sunrise" data-elevation="5">
+            <div class="phase-dot sunrise"></div>
+            <div class="phase-label">Sunrise</div>
+          </div>
+          <div class="phase-indicator" data-phase="day" data-elevation="20">
+            <div class="phase-dot day"></div>
+            <div class="phase-label">Day</div>
+          </div>
+          <div class="phase-indicator" data-phase="noon" data-elevation="45">
+            <div class="phase-dot noon"></div>
+            <div class="phase-label">Noon</div>
+          </div>
+          <div class="phase-indicator" data-phase="sunset" data-elevation="70">
+            <div class="phase-dot sunset"></div>
+            <div class="phase-label">Sunset</div>
+          </div>
+          <div class="phase-indicator" data-phase="evening" data-elevation="100">
+            <div class="phase-dot evening"></div>
+            <div class="phase-label">Evening</div>
+          </div>
+        </div>
+
+        <div class="color-palette" id="colorPalette">
+          <div class="color-swatch">
+            <div class="swatch-bg"></div>
+            <h4>Background</h4>
+            <p>var(--background-color)</p>
+          </div>
+          <div class="color-swatch">
+            <div class="swatch-accent"></div>
+            <h4>Accent</h4>
+            <p>var(--accent-color)</p>
+          </div>
+          <div class="color-swatch">
+            <div class="swatch-text"></div>
+            <h4>Text</h4>
+            <p>var(--text-color)</p>
+          </div>
+        </div>
+
+        <div class="info-grid" id="infoGrid">
+          <div class="info-card">
+            <h3>🌤️ Solar Position</h3>
+            <p id="solarInfo">Loading...</p>
+          </div>
+          <div class="info-card">
+            <h3>🌍 Location</h3>
+            <p id="locationInfo">Loading...</p>
+          </div>
+          <div class="info-card">
+            <h3>🌧️ Weather</h3>
+            <p id="weatherInfo">Loading...</p>
+          </div>
+          <div class="info-card">
+            <h3>🎨 Theme Mode</h3>
+            <p id="themeInfo">Auto (Real-time)</p>
+          </div>
+        </div>
+
+        <div class="controls">
+          <button class="btn" onclick="toggleMode()">🌤️ Auto Mode</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function clamp(x, min, max) { return Math.max(min, Math.min(max, x)); }
+    
+    function createParticles() {
+      const particlesContainer = document.getElementById('particles');
+      if (!particlesContainer) return;
+      
+      for (let i = 0; i < 50; i++) {
+        const particle = document.createElement('div');
+        particle.className = 'particle';
+        particle.style.left = Math.random() * 100 + '%';
+        particle.style.width = Math.random() * 4 + 2 + 'px';
+        particle.style.height = particle.style.width;
+        particle.style.animationDelay = Math.random() * 20 + 's';
+        particle.style.animationDuration = (Math.random() * 10 + 10) + 's';
+        particlesContainer.appendChild(particle);
+      }
+    }
+    
+    function updateTimelineBar() {
+      const bar = document.getElementById('timelineBar');
+      const sun = document.getElementById('timelineSun');
+      const label = document.getElementById('timelineLabel');
+      if (!bar || !sun || !label) return;
+      
+      let state = window.worldcss.state;
+      if (!state.sun) return;
+      
+      let elev = state.sun.elevation;
+      let pct = (clamp((elev+18)/108,0,1))*100;
+      sun.style.left = pct+'%';
+      
+      let phase = 'Night';
+      if (elev < -6) phase = 'Night';
+      else if (elev < -3) phase = 'Twilight';
+      else if (elev < 5) phase = 'Sunrise';
+      else if (elev < 20) phase = 'Day';
+      else if (elev < 45) phase = 'Noon';
+      else if (elev < 70) phase = 'Sunset';
+      else if (elev < 100) phase = 'Evening';
+      else phase = 'Night';
+      
+      label.textContent = phase + ` (${elev.toFixed(1)}°)`;
+      label.style.left = pct+'%';
+      
+      updatePhaseIndicators(phase.toLowerCase());
+    }
+    
+    function updatePhaseIndicators(activePhase) {
+      const indicators = document.querySelectorAll('.phase-indicator');
+      indicators.forEach(indicator => {
+        const dot = indicator.querySelector('.phase-dot');
+        if (dot) {
+          dot.classList.remove('active');
+          if (indicator.dataset.phase === activePhase) {
+            dot.classList.add('active');
+          }
+        }
+      });
+    }
+    
+    function setupTimelineInteractions() {
+      const bar = document.getElementById('timelineBar');
+      if (!bar) return;
+      
+      bar.addEventListener('click', (e) => {
+        const rect = bar.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const pct = (x / rect.width) * 100;
+        const elev = (pct / 100) * 108 - 18;
+        simulateTimeChange(elev);
+      });
+      
+      const indicators = document.querySelectorAll('.phase-indicator');
+      indicators.forEach(indicator => {
+        indicator.addEventListener('click', () => {
+          const elevation = parseFloat(indicator.dataset.elevation);
+          simulateTimeChange(elevation);
+        });
+      });
+    }
+    
+    function simulateTimeChange(elevation) {
+      if (window.worldcss && window.worldcss.state) {
+        window.worldcss.state.sun.elevation = elevation;
+        if (window.worldcss.applyTheme) {
+          window.worldcss.applyTheme();
+        }
+        document.dispatchEvent(new CustomEvent('worldcss:update'));
+      }
+    }
+    
+    function updateInfoCards() {
+      let state = window.worldcss.state;
+      
+      // Solar info
+      if (state.sun) {
+        document.getElementById('solarInfo').textContent = 
+          `Elevation: ${state.sun.elevation.toFixed(1)}°\nAzimuth: ${state.sun.azimuth.toFixed(1)}°`;
+      }
+      
+      // Location info
+      if (state.lat && state.lon) {
+        document.getElementById('locationInfo').textContent = 
+          `Lat: ${state.lat.toFixed(4)}\nLon: ${state.lon.toFixed(4)}`;
+      }
+      
+      // Weather info
+      if (state.weather) {
+        const clouds = state.weather.clouds?.all || 0;
+        const temp = state.weather.main?.temp || 'N/A';
+        document.getElementById('weatherInfo').textContent = 
+          `Clouds: ${clouds}%\nTemp: ${temp}°C`;
+      }
+      
+      // Theme info
+      document.getElementById('themeInfo').textContent = 
+        `${state.mode.charAt(0).toUpperCase() + state.mode.slice(1)} mode`;
+    }
+    
+    function toggleMode() {
+      if (window.worldcss && window.worldcss.setMode) {
+        const currentMode = window.worldcss.state.mode;
+        const newMode = currentMode === 'auto' ? 'light' : 
+                       currentMode === 'light' ? 'dark' : 'auto';
+        window.worldcss.setMode(newMode);
+        const button = document.querySelector('button[onclick="toggleMode()"]');
+        if (button) {
+          const modeIcons = { auto: '🌤️', light: '☀️', dark: '🌙' };
+          const modeTexts = { auto: 'Auto', light: 'Light', dark: 'Dark' };
+          button.innerHTML = `${modeIcons[newMode]} ${modeTexts[newMode]} Mode`;
+        }
+      }
+    }
+    
+    document.addEventListener('worldcss:update', () => {
+      updateTimelineBar();
+      updateInfoCards();
+    });
+    
+    document.addEventListener('DOMContentLoaded', () => {
+      createParticles();
+      setupTimelineInteractions();
+    });
+  </script>
+</body>
+</html>
