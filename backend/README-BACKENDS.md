@@ -6,21 +6,25 @@ World.CSS provides multiple backend implementations so you can use your preferre
 
 ### **PHP Backend** (Default)
 - **File**: `backend/world.php`
+- **Config**: `backend/config.php`
 - **Requirements**: PHP 7.4+ with cURL extension
 - **Setup**: Already configured in the project
 
 ### **Node.js Backend**
 - **File**: `backend/node-server.js`
+- **Config**: `backend/config-node.js`
 - **Requirements**: Node.js 14+
 - **Dependencies**: Express, Axios, dotenv
 
 ### **Python Backend**
 - **File**: `backend/python-app.py`
+- **Config**: `backend/config-python.py`
 - **Requirements**: Python 3.7+
 - **Dependencies**: Flask, Flask-CORS, requests, python-dotenv, schedule
 
 ### **Ruby Backend**
 - **File**: `backend/ruby-app.rb`
+- **Config**: `backend/config-ruby.rb`
 - **Requirements**: Ruby 2.7+
 - **Dependencies**: Sinatra, sinatra-cors, dotenv
 
@@ -48,6 +52,12 @@ CACHE_DURATION=3600
 
 # Port (optional, backend-specific defaults)
 PORT=3000
+
+# Logging level (optional)
+LOG_LEVEL=INFO
+
+# CORS origins (optional)
+CORS_ORIGINS=*
 ```
 
 ### **2. PHP Backend Setup**
@@ -56,6 +66,12 @@ PORT=3000
 # Already configured - just ensure PHP and cURL are installed
 php -v
 ```
+
+**Configuration**: Edit `backend/config.php` to customize:
+- API settings
+- Cache behavior
+- Security options
+- Logging preferences
 
 **Start server:**
 ```bash
@@ -82,6 +98,12 @@ npm start
 npm run dev
 ```
 
+**Configuration**: Edit `backend/config-node.js` to customize:
+- Server settings (port, host, CORS)
+- API configurations
+- Cache behavior
+- Security and logging options
+
 **Configuration:**
 - **Port**: 3000 (configurable via `PORT` env var)
 - **Static files**: Served from project root
@@ -104,6 +126,12 @@ pip install gunicorn
 gunicorn -w 4 -b 0.0.0.0:5000 python-app:app
 ```
 
+**Configuration**: Edit `backend/config-python.py` to customize:
+- Flask server settings
+- API configurations
+- Cache and logging behavior
+- Security options
+
 **Configuration:**
 - **Port**: 5000 (configurable via `PORT` env var)
 - **Static files**: Served from project root
@@ -125,10 +153,99 @@ ruby ruby-app.rb
 rackup -p 4567
 ```
 
+**Configuration**: Edit `backend/config-ruby.rb` to customize:
+- Sinatra server settings
+- API configurations
+- Cache and logging behavior
+- Security options
+
 **Configuration:**
 - **Port**: 4567 (configurable via `PORT` env var)
 - **Static files**: Served from project root
 - **Cache**: Automatic cleanup every hour
+
+## ⚙️ Configuration Files
+
+Each backend has a comprehensive configuration file:
+
+### **PHP Configuration** (`backend/config.php`)
+```php
+// Server Configuration
+'server' => [
+    'port' => $_ENV['PORT'] ?? 80,
+    'host' => $_ENV['HOST'] ?? 'localhost',
+    'debug' => $_ENV['DEBUG'] ?? false
+],
+
+// API Configuration
+'api' => [
+    'openweather' => [
+        'key' => $_ENV['OPENWEATHER_API_KEY'],
+        'base_url' => 'https://api.openweathermap.org/data/2.5',
+        'units' => 'metric'
+    ]
+]
+```
+
+### **Node.js Configuration** (`backend/config-node.js`)
+```javascript
+// Server Configuration
+server: {
+    port: process.env.PORT || 3000,
+    host: process.env.HOST || '0.0.0.0',
+    cors: {
+        origin: process.env.CORS_ORIGIN || '*',
+        methods: ['GET', 'POST', 'OPTIONS']
+    }
+},
+
+// API Configuration
+api: {
+    openweather: {
+        key: process.env.OPENWEATHER_API_KEY,
+        baseUrl: 'https://api.openweathermap.org/data/2.5',
+        units: 'metric'
+    }
+}
+```
+
+### **Python Configuration** (`backend/config-python.py`)
+```python
+# Server Configuration
+SERVER = {
+    'port': int(os.environ.get('PORT', 5000)),
+    'host': os.environ.get('HOST', '0.0.0.0'),
+    'debug': os.environ.get('FLASK_DEBUG', 'False').lower() == 'true'
+}
+
+# API Configuration
+API = {
+    'openweather': {
+        'key': os.environ.get('OPENWEATHER_API_KEY'),
+        'base_url': 'https://api.openweathermap.org/data/2.5',
+        'units': 'metric'
+    }
+}
+```
+
+### **Ruby Configuration** (`backend/config-ruby.rb`)
+```ruby
+# Server Configuration
+SERVER = {
+  port: ENV['PORT'] || 4567,
+  host: ENV['HOST'] || '0.0.0.0',
+  environment: ENV['RACK_ENV'] || 'development'
+}.freeze
+
+# API Configuration
+API = {
+  openweather: {
+    key: ENV['OPENWEATHER_API_KEY'],
+    base_url: 'https://api.openweathermap.org/data/2.5',
+    units: 'metric'
+  }
+}.freeze
+```
 
 ## 🔄 Switching Backends
 
@@ -303,6 +420,11 @@ git push heroku main
    rm -rf backend/cache/*
    ```
 
+5. **JSON parsing errors**
+   - Check that your backend is returning valid JSON
+   - Ensure no PHP errors are being output before JSON headers
+   - Verify API endpoints are accessible
+
 ### **Debug Mode**
 
 Enable debug logging in `assets/world.js`:
@@ -312,12 +434,12 @@ const DEBUG = true; // Set to true for console logging
 
 ## 📊 Performance Comparison
 
-| Backend | Startup Time | Memory Usage | Cache | Auto-cleanup |
-|---------|-------------|--------------|-------|--------------|
-| PHP     | Fast        | Low          | ✅    | ✅           |
-| Node.js | Medium      | Medium       | ✅    | ✅           |
-| Python  | Medium      | Medium       | ✅    | ✅           |
-| Ruby    | Fast        | Low          | ✅    | ✅           |
+| Backend | Startup Time | Memory Usage | Cache | Auto-cleanup | Config File |
+|---------|-------------|--------------|-------|--------------|-------------|
+| PHP     | Fast        | Low          | ✅    | ✅           | `config.php` |
+| Node.js | Medium      | Medium       | ✅    | ✅           | `config-node.js` |
+| Python  | Medium      | Medium       | ✅    | ✅           | `config-python.py` |
+| Ruby    | Fast        | Low          | ✅    | ✅           | `config-ruby.rb` |
 
 ## 🎯 Choose Your Backend
 

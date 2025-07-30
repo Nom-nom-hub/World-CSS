@@ -35,7 +35,19 @@ function setMode(mode) {
 function getMode() {
     return localStorage.getItem(LS_KEY) || 'auto';
 }
-function fetchJSON(url) { return fetch(url).then(r => r.json()); }
+function fetchJSON(url) { 
+    return fetch(url)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+            }
+            return response.json();
+        })
+        .catch(error => {
+            console.error('World.CSS API Error:', error);
+            throw error;
+        });
+}
 function detectLocation() {
     return new Promise((resolve) => {
         if (navigator.geolocation) {
@@ -48,18 +60,40 @@ function detectLocation() {
     });
 }
 function fallbackLocate(cb) {
-    fetchJSON(API + '?action=locate').then(data => {
-        if (data && data.lat && data.lon) cb({lat: data.lat, lon: data.lon});
-        else cb({lat: 0, lon: 0});
+    fetchJSON(API + '?action=locate').then(response => {
+        if (response && response.success && response.data) {
+            const data = response.data;
+            if (data.latitude && data.longitude) {
+                cb({lat: data.latitude, lon: data.longitude});
+            } else {
+                cb({lat: 0, lon: 0});
+            }
+        } else {
+            cb({lat: 0, lon: 0});
+        }
+    }).catch(() => {
+        cb({lat: 0, lon: 0});
     });
 }
 function fetchSun(lat, lon, time) {
     let url = `${API}?action=sun&lat=${lat}&lon=${lon}`;
     if (time) url += `&time=${time}`;
-    return fetchJSON(url);
+    
+    return fetchJSON(url).then(response => {
+        if (response && response.success && response.data) {
+            return response.data;
+        }
+        console.error('Invalid sun response:', response);
+        throw new Error('Invalid sun data response');
+    });
 }
 function fetchWeather(lat, lon) {
-    return fetchJSON(`${API}?action=weather&lat=${lat}&lon=${lon}`);
+    return fetchJSON(`${API}?action=weather&lat=${lat}&lon=${lon}`).then(response => {
+        if (response && response.success && response.data) {
+            return response.data;
+        }
+        throw new Error('Invalid weather data response');
+    });
 }
 function interpolate(a, b, t) { return a + (b - a) * t; }
 function clamp(x, min, max) { return Math.max(min, Math.min(max, x)); }
@@ -264,15 +298,22 @@ function updateAll() {
     detectLocation().then(({lat, lon}) => {
         state.lat = lat;
         state.lon = lon;
+        
         Promise.all([
             fetchSun(lat, lon),
             fetchWeather(lat, lon)
         ]).then(([sun, weather]) => {
+            
             state.sun = sun;
             state.weather = weather;
+            
             applyTheme();
             document.dispatchEvent(new CustomEvent('worldcss:update', {detail: state}));
+        }).catch(error => {
+            console.error('API Error:', error);
         });
+    }).catch(error => {
+        console.error('Location detection error:', error);
     });
 }
 

@@ -38,6 +38,7 @@
             transition: all 1.5s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
+        /* Premium Particles */
         .particles {
             position: fixed;
             top: 0;
@@ -50,9 +51,9 @@
 
         .particle {
             position: absolute;
-            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+            background: rgba(255, 255, 255, 0.1);
             border-radius: 50%;
-            animation: float 20s infinite linear;
+            animation: float linear infinite;
         }
 
         @keyframes float {
@@ -1497,6 +1498,56 @@
             opacity: 0;
             transition: opacity 0.3s;
         }
+
+        /* Stars for dark phases */
+        .stars {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 2;
+            opacity: 0;
+            transition: opacity 2s ease-in-out;
+        }
+
+        .star {
+            position: absolute;
+            background: #ffffff;
+            border-radius: 50%;
+            animation: twinkle linear infinite;
+        }
+
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.3; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.2); }
+        }
+
+        /* Clouds for light phases */
+        .clouds {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 2;
+            opacity: 0;
+            transition: opacity 2s ease-in-out;
+        }
+
+        .cloud {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.4);
+            border-radius: 50px;
+            animation: floatCloud linear infinite;
+        }
+
+        @keyframes floatCloud {
+            0% { transform: translateX(-200px); }
+            100% { transform: translateX(calc(100vw + 200px)); }
+        }
     </style>
 </head>
 <body>
@@ -1506,6 +1557,12 @@
 
     <div class="demo-container">
         <div class="particles" id="particles"></div>
+        
+        <!-- Stars for dark phases -->
+        <div class="stars" id="stars"></div>
+        
+        <!-- Clouds for light phases -->
+        <div class="clouds" id="clouds"></div>
         
         
         
@@ -1518,6 +1575,9 @@
                 <div class="logo">World.CSS</div>
             </div>
             <div class="tagline">Living Ambient Themes</div>
+            <div class="mode-toggle">
+                <button class="btn" onclick="toggleMode()">🌙 Toggle Mode</button>
+            </div>
         </div>
 
         <div class="timeline-section">
@@ -1602,9 +1662,7 @@
                     </div>
                 </div>
 
-                <div class="controls">
-                    <button class="btn" onclick="toggleMode()">🌙 Toggle Mode</button>
-                </div>
+
             </div>
         </div>
     </div>
@@ -1625,16 +1683,78 @@
             }
         }
 
+        // Create stars for dark phases
+        function createStars() {
+            const stars = document.getElementById('stars');
+            stars.innerHTML = '';
+            for (let i = 0; i < 100; i++) {
+                const star = document.createElement('div');
+                star.className = 'star';
+                star.style.left = Math.random() * 100 + '%';
+                star.style.top = Math.random() * 100 + '%';
+                star.style.width = Math.random() * 3 + 1 + 'px';
+                star.style.height = star.style.width;
+                star.style.animationDelay = Math.random() * 5 + 's';
+                star.style.animationDuration = (Math.random() * 3 + 2) + 's';
+                stars.appendChild(star);
+            }
+        }
+
+        // Create clouds for light phases
+        function createClouds() {
+            const clouds = document.getElementById('clouds');
+            clouds.innerHTML = '';
+            for (let i = 0; i < 8; i++) {
+                const cloud = document.createElement('div');
+                cloud.className = 'cloud';
+                cloud.style.top = Math.random() * 60 + 10 + '%';
+                cloud.style.width = Math.random() * 100 + 50 + 'px';
+                cloud.style.height = Math.random() * 30 + 20 + 'px';
+                cloud.style.animationDelay = Math.random() * 20 + 's';
+                cloud.style.animationDuration = (Math.random() * 30 + 60) + 's';
+                clouds.appendChild(cloud);
+            }
+        }
+
+        // Update background elements based on phase
+        function updateBackgroundElements(phase) {
+            const stars = document.getElementById('stars');
+            const clouds = document.getElementById('clouds');
+            
+            // Dark phases: show stars
+            if (phase === 'night' || phase === 'twilight' || phase === 'evening') {
+                stars.style.opacity = '1';
+                clouds.style.opacity = '0';
+            }
+            // Light phases: show clouds with appropriate opacity
+            else if (phase === 'day' || phase === 'noon' || phase === 'sunrise' || phase === 'sunset') {
+                stars.style.opacity = '0';
+                clouds.style.opacity = '0.3'; // Much more subtle
+            }
+            // Transition phases: fade both
+            else {
+                stars.style.opacity = '0';
+                clouds.style.opacity = '0';
+            }
+        }
+
         // Update timeline with premium animations
         function updateTimeline() {
             const state = window.worldcss?.state;
-            if (!state || !state.sun) return;
+            
+            if (!state || !state.sun) {
+                return;
+            }
 
             const sun = document.getElementById('timelineSun');
             const label = document.getElementById('timelineLabel');
             const phases = document.querySelectorAll('.phase-dot');
             
             const elev = state.sun.elevation;
+            
+            if (typeof elev === 'undefined' || elev === null) {
+                return;
+            }
             
             // Map elevation to intuitive day cycle positions
             let progress;
@@ -1682,6 +1802,9 @@
             
             // Update phase indicators
             updatePhaseIndicators(phaseClass);
+            
+            // Update background elements based on phase
+            updateBackgroundElements(phaseClass);
         }
 
         function updatePhaseIndicators(activePhase) {
@@ -1725,15 +1848,23 @@
             if (state.sun) {
                 const elev = state.sun.elevation;
                 const azim = state.sun.azimuth;
-                solarInfo.textContent = `Elevation: ${elev.toFixed(1)}°\nAzimuth: ${azim.toFixed(1)}°`;
+                if (typeof elev === 'number' && typeof azim === 'number') {
+                    solarInfo.textContent = `Elevation: ${elev.toFixed(1)}°\nAzimuth: ${azim.toFixed(1)}°`;
+                } else {
+                    solarInfo.textContent = 'Solar data unavailable';
+                }
             }
 
             // Weather info
             const weatherInfo = document.getElementById('weatherInfo');
             if (state.weather) {
-                const temp = state.weather.main?.temp;
-                const desc = state.weather.weather?.[0]?.description;
-                weatherInfo.textContent = `${temp}°C, ${desc}`;
+                const temp = state.weather.temp;
+                const desc = state.weather.description;
+                if (typeof temp === 'number' && desc) {
+                    weatherInfo.textContent = `${temp.toFixed(1)}°C, ${desc}`;
+                } else {
+                    weatherInfo.textContent = 'Weather data unavailable';
+                }
             }
 
             // Theme info with time
@@ -1805,6 +1936,23 @@
             
             state.sun.elevation = elev;
             
+            // Determine phase based on elevation - match the HTML data-elevation values
+            let phase, phaseClass;
+            if (elev <= -12) { phase = 'Night'; phaseClass = 'night'; }
+            else if (elev <= -3) { phase = 'Twilight'; phaseClass = 'twilight'; }
+            else if (elev <= 5) { phase = 'Sunrise'; phaseClass = 'sunrise'; }
+            else if (elev <= 20) { phase = 'Day'; phaseClass = 'day'; }
+            else if (elev <= 45) { phase = 'Noon'; phaseClass = 'noon'; }
+            else if (elev <= 70) { phase = 'Sunset'; phaseClass = 'sunset'; }
+            else if (elev <= 100) { phase = 'Evening'; phaseClass = 'evening'; }
+            else { phase = 'Night'; phaseClass = 'night'; }
+            
+            // Update phase indicators
+            updatePhaseIndicators(phaseClass);
+            
+            // Update background elements
+            updateBackgroundElements(phaseClass);
+            
             if (window.worldcss && window.worldcss.applyTheme) {
                 window.worldcss.applyTheme();
                 document.dispatchEvent(new CustomEvent('worldcss:update'));
@@ -1812,6 +1960,16 @@
             
             updateTimeline();
             updateInfoCards();
+        }
+
+        function updateModeButton() {
+            const button = document.querySelector('button[onclick="toggleMode()"]');
+            if (button && window.worldcss && window.worldcss.state) {
+                const currentMode = window.worldcss.state.mode;
+                const modeIcons = { auto: '🌤️', light: '☀️', dark: '🌙' };
+                const modeTexts = { auto: 'Auto', light: 'Light', dark: 'Dark' };
+                button.innerHTML = `${modeIcons[currentMode]} ${modeTexts[currentMode]} Mode`;
+            }
         }
 
         function toggleMode() {
@@ -1823,20 +1981,15 @@
                 window.worldcss.setMode(newMode);
                 
                 // Update the button text
-                const button = document.querySelector('button[onclick="toggleMode()"]');
-                if (button) {
-                    const modeIcons = { auto: '🌤️', light: '☀️', dark: '🌙' };
-                    const modeTexts = { auto: 'Auto', light: 'Light', dark: 'Dark' };
-                    button.innerHTML = `${modeIcons[newMode]} ${modeTexts[newMode]} Mode`;
-                }
+                updateModeButton();
             }
         }
-
-
 
         // Initialize
         document.addEventListener('DOMContentLoaded', () => {
             createParticles();
+            createStars();
+            createClouds();
             setupTimelineInteractions();
             
             // Hide loading overlay after theme is applied
@@ -1847,6 +2000,9 @@
                         document.getElementById('loadingOverlay').style.display = 'none';
                     }, 500);
                 }, 1000);
+                
+                // Update mode button text
+                updateModeButton();
             });
             
             // Update timeline and info cards

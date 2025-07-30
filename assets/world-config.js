@@ -24,8 +24,8 @@ window.WorldCSSConfig = {
     
     sunrise: {
       name: "Sunrise",
-      background: { hue: 25, saturation: 95, lightness: 70 },
-      accent: { hue: 35, saturation: 90, lightness: 70 },
+      background: { hue: 25, saturation: 95, lightness: 55 },
+      accent: { hue: 35, saturation: 90, lightness: 60 },
       text: { primary: "#000000", secondary: "#222222" },
       overlay: "rgba(255,150,80,0.3)",
       description: "Warm orange-pink morning light"
@@ -33,8 +33,8 @@ window.WorldCSSConfig = {
     
     day: {
       name: "Daylight",
-      background: { hue: 50, saturation: 85, lightness: 85 },
-      accent: { hue: 40, saturation: 90, lightness: 65 },
+      background: { hue: 50, saturation: 85, lightness: 65 },
+      accent: { hue: 40, saturation: 90, lightness: 55 },
       text: { primary: "#000000", secondary: "#222222" },
       overlay: "rgba(255,230,150,0.2)",
       description: "Bright golden daylight"
@@ -42,8 +42,8 @@ window.WorldCSSConfig = {
     
     noon: {
       name: "Noon",
-      background: { hue: 210, saturation: 70, lightness: 90 },
-      accent: { hue: 200, saturation: 80, lightness: 70 },
+      background: { hue: 210, saturation: 70, lightness: 70 },
+      accent: { hue: 200, saturation: 80, lightness: 60 },
       text: { primary: "#000000", secondary: "#333333" },
       overlay: "rgba(150,200,255,0.15)",
       description: "Bright cool blue sky at peak sun"
